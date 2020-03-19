@@ -4,51 +4,93 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float runSpeed = 1.0f;
-    public Rigidbody2D rigidbody;
+    [SerializeField] float firstJumpSpeed = 25.0f;
+    [SerializeField] float secondJumpSpeed = 10.0f;
+    [SerializeField] float climbSpeed = 3.0f;
 
+
+    public Rigidbody2D rigidbody;
+    private Animator animatorComponent;
+    int jumpcount = 0;
+    private SpriteRenderer spriteComponent;
+    bool running = false;
+    Collider2D collider2D;
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        animatorComponent = GetComponent<Animator>();
+        spriteComponent = GetComponent<SpriteRenderer>();
+        collider2D = GetComponent<Collider2D>();
     }
     // Update is called once per frame
     void Update()
     {
         Run();
-        FlipSprite();
+        HandleHorizontalMovement();
+        Jump();
+        ClimbLadder();
     }
-    
+
     void Run()
     {
+
         float controlThrow = Input.GetAxis("Horizontal");
-        Vector2 playerVelocity = new Vector2(controlThrow*runSpeed, rigidbody.velocity.y);
+        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
         rigidbody.velocity = playerVelocity;
-        
+
+    }
+
+    private void ClimbLadder()
+    {
+        if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
+            return;
+        }
+        float controlThrow = Input.GetAxis("Vertical");
+        Vector2 climbVelocity = new Vector2(rigidbody.velocity.x,controlThrow*climbSpeed);
+        rigidbody.velocity = climbVelocity;
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.W) && jumpcount != 2 || Input.GetKeyDown(KeyCode.UpArrow) && jumpcount != 2)
         {
-            //Debug.Log("Space key was pressed.");
-            for(int i= 0; i<10; i++)
+            if(jumpcount == 0)
             {
-                Debug.Log("whatever");
+                rigidbody.AddForce(new Vector2(0, firstJumpSpeed), ForceMode2D.Impulse);
+                jumpcount++;
             }
+            else
+            {
+                rigidbody.AddForce(new Vector2(0, secondJumpSpeed), ForceMode2D.Impulse);
+                jumpcount++;
+            }
+            //Vector2 jumpVelocity = new Vector2(0f, jumpSpeed);
+            //rigidbody.velocity += jumpVelocity;
         }
-
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Debug.Log("Space key was released.");
-        }
-
     }
 
-    void FlipSprite()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (Input.GetAxis("Horizontal") < 0)
-        {
+        jumpcount = 0;
+    }
 
-            //transform.localScale = new Vector2(Mathf.Sign(rigidbody.velocity.x), transform.localScale.y);
+    private void HandleHorizontalMovement()
+    {
+        var direction = Input.GetAxisRaw("Horizontal");
+        var velocity = rigidbody.velocity;
+        
+        if (direction > 0f)
+        {
+            spriteComponent.flipX = false; // Faces right
         }
+        else if (direction < 0f)
+        {
+            spriteComponent.flipX = true; // Faces left
+        }
+
+
+        var position = transform.position;
+
+        animatorComponent.SetBool(10, Mathf.Abs(direction) > 0.0f);
     }
 }
