@@ -15,51 +15,59 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteComponent;
     bool running = false;
     Collider2D collider2D;
+    float previousGravityScale;
+
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         animatorComponent = GetComponent<Animator>();
         spriteComponent = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
+        previousGravityScale = rigidbody.gravityScale;
     }
     // Update is called once per frame
     void Update()
     {
+        
         Run();
         HandleHorizontalMovement();
         Jump();
         ClimbLadder();
+        
     }
 
     void Run()
     {
-
         float controlThrow = Input.GetAxis("Horizontal");
         Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
         rigidbody.velocity = playerVelocity;
-
     }
 
     private void ClimbLadder()
     {
         if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
+            animatorComponent.SetBool("climbing", false);
+            rigidbody.gravityScale = previousGravityScale;
             return;
         }
         float controlThrow = Input.GetAxis("Vertical");
         Vector2 climbVelocity = new Vector2(rigidbody.velocity.x,controlThrow*climbSpeed);
         rigidbody.velocity = climbVelocity;
+        rigidbody.gravityScale = 0;
+        bool verticalSpeed = Mathf.Abs(rigidbody.velocity.y) > Mathf.Epsilon;
+        animatorComponent.SetBool("climbing", verticalSpeed);
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && jumpcount != 2 || Input.GetKeyDown(KeyCode.UpArrow) && jumpcount != 2)
+        if (Input.GetKeyDown(KeyCode.W) && jumpcount < 2 || Input.GetKeyDown(KeyCode.UpArrow) && jumpcount < 2)
         {
             if(jumpcount == 0)
             {
                 rigidbody.AddForce(new Vector2(0, firstJumpSpeed), ForceMode2D.Impulse);
                 jumpcount++;
             }
-            else
+            else if(jumpcount == 1)
             {
                 rigidbody.AddForce(new Vector2(0, secondJumpSpeed), ForceMode2D.Impulse);
                 jumpcount++;
