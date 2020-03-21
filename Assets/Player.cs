@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 public class Player : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField] float firstJumpSpeed = 25.0f;
     [SerializeField] float secondJumpSpeed = 10.0f;
     [SerializeField] float climbSpeed = 3.0f;
+    [SerializeField] int health = 100;
+    [SerializeField] TextMeshProUGUI HealthText;
 
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour
         spriteComponent = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
         previousGravityScale = rigidbody.gravityScale;
+        HealthText.text = health.ToString();
     }
     // Update is called once per frame
     void Update()
@@ -91,6 +95,20 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jumpcount = 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "trap")
+        {
+            health -= 10;
+            HealthText.text = health.ToString();
+        }
+        else if (collision.tag == "enemy")
+        {
+            health -= 10;
+            HealthText.text = health.ToString();
+        }
     }
 
     private void HandleHorizontalMovement()
