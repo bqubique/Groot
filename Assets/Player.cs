@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Player : MonoBehaviour
 {
-    [SerializeField] float runSpeed = 1.0f;
+    /*[SerializeField]*/ float runSpeed;
     [SerializeField] float firstJumpSpeed = 25.0f;
     [SerializeField] float secondJumpSpeed = 10.0f;
     [SerializeField] float climbSpeed = 3.0f;
-
 
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
     int jumpcount = 0;
     private SpriteRenderer spriteComponent;
     bool running = false;
+
     Collider2D collider2D;
     float previousGravityScale;
 
-    private void Start()
+    void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         animatorComponent = GetComponent<Animator>();
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        runSpeed = 4;
         Run();
         HandleHorizontalMovement();
         Jump();
@@ -39,8 +39,19 @@ public class Player : MonoBehaviour
     void Run()
     {
         float controlThrow = Input.GetAxis("Horizontal");
-        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
-        rigidbody.velocity = playerVelocity;
+        Vector2 playerVelocity;
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            runSpeed = 8;
+            playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
+            rigidbody.velocity = playerVelocity;
+        }
+        else
+        {
+            runSpeed = 6;
+            playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
+            rigidbody.velocity = playerVelocity;
+        }
     }
 
     private void ClimbLadder()
@@ -58,7 +69,7 @@ public class Player : MonoBehaviour
         animatorComponent.SetBool("climbing", verticalSpeed);
     }
 
-    void Jump()
+    private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.W) && jumpcount < 2 || Input.GetKeyDown(KeyCode.UpArrow) && jumpcount < 2)
         {
