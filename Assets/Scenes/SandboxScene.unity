@@ -21958,8 +21958,8 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -3.9737225, y: 20.091652}
       - {x: -3.9998987, y: -3.7485948}
-      - {x: 35.00944, y: -3.8533}
-      - {x: 35.032185, y: 20.042732}
+      - {x: 174.20326, y: -3.6161733}
+      - {x: 173.2775, y: 20.042732}
 --- !u!1 &2065323010
 GameObject:
   m_ObjectHideFlags: 0
@@ -31731,12 +31731,12 @@ PrefabInstance:
     - target: {fileID: 3399550176112235399, guid: a71afc7c0967c4041b0acb4a055dee66,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.025633
+      value: -7.038846
       objectReference: {fileID: 0}
     - target: {fileID: 3399550176112235399, guid: a71afc7c0967c4041b0acb4a055dee66,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4671507
+      value: 1.4134936
       objectReference: {fileID: 0}
     - target: {fileID: 3399550176112235399, guid: a71afc7c0967c4041b0acb4a055dee66,
         type: 3}
