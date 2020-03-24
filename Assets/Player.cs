@@ -85,8 +85,6 @@ public class Player : MonoBehaviour
                 rigidbody.velocity = JumpVelocityToAdd;
                 jumpcount++;
             }
-            //Vector2 jumpVelocity = new Vector2(0f, jumpSpeed);
-            //rigidbody.velocity += jumpVelocity;
         }
     }
 
@@ -97,19 +95,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "trap")
-        {
-            health -= 10;
-            HealthText.text = health.ToString();
-        }
-        else if (collision.tag == "enemy")
-        {
-            health -= 10;
-            HealthText.text = health.ToString();
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.tag == "trap")
+    //    {
+    //        health -= 10;
+    //        HealthText.text = health.ToString();
+    //    }
+    //    else if (collision.tag == "enemy")
+    //    {
+    //        health -= 10;
+    //        HealthText.text = health.ToString();
+    //    }
+    //}
 
     private void HandleHorizontalMovement()
     {
@@ -126,7 +124,7 @@ public class Player : MonoBehaviour
         }
 
 
-        var position = transform.position;
+        var position = transform.position; //Qipa kullanmak istemiş, kullanmamış.
 
         animatorComponent.SetBool(10, Mathf.Abs(direction) > 0.0f);
     }
