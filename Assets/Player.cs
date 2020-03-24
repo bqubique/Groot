@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
-
 public class Player : MonoBehaviour
 {
     /*[SerializeField]*/ float runSpeed;
@@ -18,7 +16,6 @@ public class Player : MonoBehaviour
     int jumpcount = 0;
     private SpriteRenderer spriteComponent;
     bool running = false;
-
 
     Collider2D collider2D;
     float previousGravityScale;
@@ -38,7 +35,6 @@ public class Player : MonoBehaviour
         runSpeed = 4;
         Run();
         HandleHorizontalMovement();
-        check();
         Jump();
         ClimbLadder();
         
@@ -79,23 +75,26 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (CrossPlatformInputManager.GetButtonDown("Jump"))
+        if (Input.GetKeyDown(KeyCode.W) && jumpcount < 2 || Input.GetKeyDown(KeyCode.UpArrow) && jumpcount < 2)
         {
-            if (jumpcount == 0)
+            if(jumpcount == 0)
             {
-                Vector2 JumpVelocityToAdd = new Vector2(0f, firstJumpSpeed);
-                rigidbody.velocity = JumpVelocityToAdd;
+                rigidbody.AddForce(new Vector2(0, firstJumpSpeed), ForceMode2D.Impulse);
                 jumpcount++;
             }
+            else if(jumpcount == 1)
+            {
+                rigidbody.AddForce(new Vector2(0, secondJumpSpeed), ForceMode2D.Impulse);
+                jumpcount++;
+            }
+            //Vector2 jumpVelocity = new Vector2(0f, jumpSpeed);
+            //rigidbody.velocity += jumpVelocity;
         }
     }
 
-    private void check()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider2D.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-            jumpcount = 0;
-        }
+        jumpcount = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
