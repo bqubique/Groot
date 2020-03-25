@@ -6,7 +6,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour
 {
-    /*[SerializeField]*/ float runSpeed;
+    [SerializeField] float runSpeed;
     [SerializeField] float firstJumpSpeed = 25.0f;
     [SerializeField] float secondJumpSpeed = 10.0f;
     [SerializeField] float climbSpeed = 3.0f;
@@ -19,7 +19,8 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteComponent;
     bool running = false;
 
-    Collider2D collider2D;
+    CapsuleCollider2D bodyCollider;
+    BoxCollider2D playerFeet;
     float previousGravityScale;
 
     void Start()
@@ -27,14 +28,14 @@ public class Player : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         animatorComponent = GetComponent<Animator>();
         spriteComponent = GetComponent<SpriteRenderer>();
-        collider2D = GetComponent<Collider2D>();
+        bodyCollider = GetComponent<CapsuleCollider2D>();
         previousGravityScale = rigidbody.gravityScale;
         HealthText.text = health.ToString();
+        playerFeet = GetComponent<BoxCollider2D>();
     }
     // Update is called once per frame
     void Update()
     {
-        runSpeed = 4;
         Run();
         HandleHorizontalMovement();
         Jump();
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
         Vector2 playerVelocity;
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            runSpeed = 8;
+            runSpeed = 10;
             playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
             rigidbody.velocity = playerVelocity;
         }
@@ -62,7 +63,7 @@ public class Player : MonoBehaviour
 
     private void ClimbLadder()
     {
-        if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
+        if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
             animatorComponent.SetBool("climbing", false);
             rigidbody.gravityScale = previousGravityScale;
             return;
@@ -77,6 +78,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
+        //if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
             if(jumpcount == 0)
@@ -85,12 +87,19 @@ public class Player : MonoBehaviour
                 rigidbody.velocity = JumpVelocityToAdd;
                 jumpcount++;
             }
+            else if (jumpcount == 1)
+            {
+                Vector2 JumpVelocityToAdd = new Vector2(0f, secondJumpSpeed);
+                rigidbody.velocity = JumpVelocityToAdd;
+                jumpcount++;
+            }
+            //return;
         }
     }
 
     private void CheckIfTouchingGround()
     {
-        if (collider2D.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             jumpcount = 0;
         }
     }

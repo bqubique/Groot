@@ -17,7 +17,7 @@ TagManager:
   - Climbing
   - Player
   - Background
-  - 
+  - Jumper
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 197775881
+    locked: 0
+  - name: Jumper
+    uniqueID: 1408063767
     locked: 0
   - name: Ladders
     uniqueID: 2209719901
