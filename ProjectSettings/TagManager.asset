@@ -18,7 +18,7 @@ TagManager:
   - Player
   - Background
   - Jumper
-  - 
+  - BG
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 2374288191
     locked: 0
   - name: Background
     uniqueID: 197775881
