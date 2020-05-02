@@ -6,6 +6,9 @@ public class BackgroundFollow : MonoBehaviour
 {
     Camera cam;
     [SerializeField]GameObject image;
+    public Transform cameraTransform;
+    //Set it to whatever value you think is best
+    public float distanceFromCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +18,7 @@ public class BackgroundFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        image.transform.position = new Vector3(cam.transform.position.x,cam.transform.position.y,cam.transform.position.z);
+        Vector3 resultingPosition = cameraTransform.position + cameraTransform.forward * distanceFromCamera;
+        image.transform.position = new Vector3(cam.transform.position.x,cam.transform.position.y,image.transform.position.z);
     }
 }
