@@ -59,12 +59,14 @@ public class Player : MonoBehaviour
             playerVelocity = new Vector2(controlThrow * runSpeed, rigidbody.velocity.y);
             rigidbody.velocity = playerVelocity;
         }
+        bool PlayerHasHorizontalSpeed = Mathf.Abs(rigidbody.velocity.x) > Mathf.Epsilon;
+        animatorComponent.SetBool("Walking", PlayerHasHorizontalSpeed);
     }
 
     private void ClimbLadder()
     {
         if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
-            animatorComponent.SetBool("climbing", false);
+            animatorComponent.SetBool("Jumping", false);
             rigidbody.gravityScale = previousGravityScale;
             return;
         }
@@ -72,8 +74,9 @@ public class Player : MonoBehaviour
         Vector2 climbVelocity = new Vector2(rigidbody.velocity.x,controlThrow*climbSpeed);
         rigidbody.velocity = climbVelocity;
         rigidbody.gravityScale = 0;
+
         bool verticalSpeed = Mathf.Abs(rigidbody.velocity.y) > Mathf.Epsilon;
-        animatorComponent.SetBool("climbing", verticalSpeed);
+        animatorComponent.SetBool("Jumping", verticalSpeed);
     }
 
     private void Jump()
@@ -81,7 +84,9 @@ public class Player : MonoBehaviour
         //if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
-            if(jumpcount == 0)
+            bool verticalSpeed = Mathf.Abs(rigidbody.velocity.y) > Mathf.Epsilon;
+            animatorComponent.SetBool("Jumping", verticalSpeed);
+            if (jumpcount == 0)
             {
                 Vector2 JumpVelocityToAdd = new Vector2(0f, firstJumpSpeed);
                 rigidbody.velocity = JumpVelocityToAdd;
@@ -93,7 +98,7 @@ public class Player : MonoBehaviour
                 rigidbody.velocity = JumpVelocityToAdd;
                 jumpcount++;
             }
-            //return;
+
         }
     }
 
