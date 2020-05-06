@@ -31,19 +31,16 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        // healthBar = gameObject.AddComponent<HealthBar>();
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
         healthBar.SetMaxHealth(100);
-        //healthBar.SetHealth(30);
         rigidbody = GetComponent<Rigidbody2D>();
         animatorComponent = GetComponent<Animator>();
         spriteComponent = GetComponent<SpriteRenderer>();
         bodyCollider = GetComponent<CapsuleCollider2D>();
         previousGravityScale = rigidbody.gravityScale;
-        //HealthText.text = health.ToString();
         playerFeet = GetComponent<BoxCollider2D>();
     }
-    // Update is called once per frame
+
     void Update()
     {
         Run();
@@ -51,7 +48,8 @@ public class Player : MonoBehaviour
         Jump();
         ClimbLadder();
         CheckIfTouchingGround();
-        healthBar.damageHealth(-1);
+        Trap();
+        checkHealth();
     }
 
     void Run()
@@ -72,6 +70,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void checkHealth() {
+        if (health <= 0) {
+            //LOAD GAME OVER SCENE HERE 
+        }
+    }
+
+
+    private void Trap() {
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Traps")))
+        {
+            healthBar.damageHealth(5);
+        }
+
+    }
+
     private void ClimbLadder()
     {
         if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
@@ -89,7 +102,6 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-       //if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
             if(jumpcount == 0)
@@ -115,20 +127,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.tag == "trap")
-    //    {
-    //        health -= 10;
-    //        HealthText.text = health.ToString();
-    //    }
-    //    else if (collision.tag == "enemy")
-    //    {
-    //        health -= 10;
-    //        HealthText.text = health.ToString();
-    //    }
-    //}
-
     private void HandleHorizontalMovement()
     {
         var direction = Input.GetAxisRaw("Horizontal");
@@ -144,7 +142,7 @@ public class Player : MonoBehaviour
         }
 
 
-        var position = transform.position; //Qipa kullanmak istemiş, kullanmamış.
+        var position = transform.position; //Qipa kullanmak istemiş, kullanmamış. Deniz canimsin <3
 
         animatorComponent.SetBool(10, Mathf.Abs(direction) > 0.0f);
     }

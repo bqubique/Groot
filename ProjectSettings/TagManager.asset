@@ -13,14 +13,14 @@ TagManager:
   - UI
   - 
   - 
-  - Ground
+  - 
   - Climbing
   - Player
   - Background
   - Jumper
   - BG
-  - 
-  - 
+  - Traps
+  - Ground
   - 
   - 
   - 
@@ -55,6 +55,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3939719795
+    locked: 0
+  - name: Traps
+    uniqueID: 1863411325
     locked: 0
   - name: Foreground
     uniqueID: 3700092533

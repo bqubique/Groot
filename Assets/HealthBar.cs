@@ -30,7 +30,7 @@ public class HealthBar : MonoBehaviour
 
     public void damageHealth(int decrementHealth)
     {
-        slider.value += decrementHealth;
+        slider.value -= decrementHealth;
     }
 
 
