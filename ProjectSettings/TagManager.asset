@@ -21,7 +21,7 @@ TagManager:
   - BG
   - Traps
   - Ground
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Ladders
     uniqueID: 2209719901
+    locked: 0
+  - name: Enemy
+    uniqueID: 56007213
     locked: 0
   - name: Player
     uniqueID: 3939719795

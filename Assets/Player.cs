@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] float firstJumpSpeed = 25.0f;
     [SerializeField] float secondJumpSpeed = 10.0f;
     [SerializeField] float climbSpeed = 3.0f;
-    [SerializeField] int health = 100;
+    [SerializeField] int currentHealth = 100;
+    [SerializeField] Vector2 fly = new Vector2(40f, 20f);
     [SerializeField] TextMeshProUGUI HealthText;
 
     public Rigidbody2D rigidbody;
@@ -19,13 +20,12 @@ public class Player : MonoBehaviour
     int jumpcount = 0;
     private SpriteRenderer spriteComponent;
     bool running = false;
+    bool isAlive = true;
 
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
     float previousGravityScale;
 
-    public int maxHealth = 100;
-    public int currentHealth;
 
     [SerializeField] public HealthBar healthBar;
 
@@ -49,7 +49,20 @@ public class Player : MonoBehaviour
         ClimbLadder();
         CheckIfTouchingGround();
         Trap();
-        checkHealth();
+        Enemy();
+        CheckAlive();
+    }
+
+    void CheckAlive()
+    {
+        if(currentHealth > 0)
+        {
+            isAlive = false;
+        }
+        else
+        {
+            isAlive = true;
+        }
     }
 
     void Run()
@@ -70,9 +83,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void checkHealth() {
-        if (health <= 0) {
-            //LOAD GAME OVER SCENE HERE 
+    private void Enemy()
+    {
+        if (bodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            healthBar.damageHealth(25);
+            GetComponent<Rigidbody2D>().velocity = fly;
+            currentHealth -= 25;
         }
     }
 
@@ -81,8 +98,8 @@ public class Player : MonoBehaviour
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Traps")))
         {
             healthBar.damageHealth(5);
+            currentHealth -= 5;
         }
-
     }
 
     private void ClimbLadder()
@@ -116,13 +133,13 @@ public class Player : MonoBehaviour
                 rigidbody.velocity = JumpVelocityToAdd;
                 jumpcount++;
             }
-            //return;
         }
     }
 
     private void CheckIfTouchingGround()
     {
-        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
             jumpcount = 0;
         }
     }
