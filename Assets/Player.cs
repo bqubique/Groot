@@ -7,20 +7,27 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    static float xside = 30f;
+    static float yside = 10f;
+    static float xtop = 45f;
+    static float ytop = 20f;
+
     [SerializeField] float runSpeed;
     [SerializeField] float firstJumpSpeed = 25.0f;
     [SerializeField] float secondJumpSpeed = 10.0f;
     [SerializeField] float climbSpeed = 3.0f;
     [SerializeField] int currentHealth = 100;
-    [SerializeField] Vector2 fly = new Vector2(40f, 20f);
+    [SerializeField] Vector2 flyside = new Vector2(xside, yside);
+    [SerializeField] Vector2 flytop = new Vector2(xtop, ytop);
     [SerializeField] TextMeshProUGUI HealthText;
-
+    
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
     int jumpcount = 0;
     private SpriteRenderer spriteComponent;
     bool running = false;
     bool isAlive = true;
+    bool FaceRight = false;
 
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
@@ -45,6 +52,7 @@ public class Player : MonoBehaviour
     {
         Run();
         HandleHorizontalMovement();
+        WhichWayFacing();
         Jump();
         ClimbLadder();
         CheckIfTouchingGround();
@@ -87,9 +95,15 @@ public class Player : MonoBehaviour
     {
         if (bodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
-            healthBar.damageHealth(25);
-            GetComponent<Rigidbody2D>().velocity = fly;
-            currentHealth -= 25;
+            healthBar.damageHealth(5);
+            GetComponent<Rigidbody2D>().velocity = flyside;
+            currentHealth -= 5;
+        }
+        else if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            healthBar.damageHealth(5);
+            GetComponent<Rigidbody2D>().velocity = flytop;
+            currentHealth -= 5;
         }
     }
 
@@ -144,6 +158,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    void WhichWayFacing()
+    {
+        if (FaceRight)
+        {
+            flyside = new Vector2(-xside, yside);
+            flytop = new Vector2(-xtop, ytop);
+        }
+        else
+        {
+            flyside = new Vector2(xside, yside);
+            flytop = new Vector2(xtop, ytop);
+        }
+    }
+
     private void HandleHorizontalMovement()
     {
         var direction = Input.GetAxisRaw("Horizontal");
@@ -152,10 +180,12 @@ public class Player : MonoBehaviour
         if (direction > 0f)
         {
             spriteComponent.flipX = false; // Faces right
+            FaceRight = true;
         }
         else if (direction < 0f)
         {
             spriteComponent.flipX = true; // Faces left
+            FaceRight = false;
         }
 
 
