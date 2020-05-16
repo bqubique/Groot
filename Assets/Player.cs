@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 flytop = new Vector2(xtop, ytop);
     [SerializeField] TextMeshProUGUI HealthText;
     
+    
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
     int jumpcount = 0;
@@ -59,6 +60,7 @@ public class Player : MonoBehaviour
         Trap();
         Enemy();
         CheckAlive();
+        CheckLiquid();
     }
 
     void CheckAlive()
@@ -107,6 +109,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void CheckLiquid()
+    {
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
+        {
+            healthBar.damageHealth(currentHealth);
+            //GetComponent<Rigidbody2D>().velocity = flyside;
+            currentHealth -= 5;
+        }
+    }
+
+   
 
     private void Trap() {
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Traps")))
