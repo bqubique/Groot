@@ -6,35 +6,30 @@ public class MainMenu : MonoBehaviour {
 
     [Header("Menu Screens")]
     public GameObject mainScreen;
-    public GameObject startScreen;
-    public GameObject newLevelScreen;
-    public GameObject loadLevelScreen;
+    public GameObject playScreen;
     
 
-	public void StartScreen()
+	public void Play()
     {
         mainScreen.SetActive(false);
-        startScreen.SetActive(true);
+        playScreen.SetActive(true);
     }
 
-    public void NewLevel()
+    public void NewGame()
     {
-        startScreen.SetActive(false);
-        newLevelScreen.SetActive(true);
-        //Application.LoadLevel("FirstLevel");
+        playScreen.SetActive(false);
+        Application.LoadLevel("HasanLevel1");
     }
 
-    public void LoadLevel()
+    public void LoadGame()
     {
-        startScreen.SetActive(false);
-        loadLevelScreen.SetActive(true);
+        playScreen.SetActive(false);
+        Application.LoadLevel("HasanLevel1");
     }
 
-    public void back2Menu()
+    public void Back2Main()
     {
-        startScreen.SetActive(false);
-        loadLevelScreen.SetActive(false);
-        newLevelScreen.SetActive(false);
+        playScreen.SetActive(false);
         mainScreen.SetActive(true);
     }
 
