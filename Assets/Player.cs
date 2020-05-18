@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
 
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
+
+    
+    
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
     private SpriteRenderer spriteComponent;
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour
         Trap();
         Enemy();
         CheckAlive();
+        CheckLiquid();
     }
                     // 22 42 62 82 102 122
     void CheckAlive()
@@ -140,6 +144,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void CheckLiquid()
+    {
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
+        {
+            healthBar.damageHealth(currentHealth);
+            //GetComponent<Rigidbody2D>().velocity = flyside;
+            currentHealth -= 5;
+        }
+    }
+
+   
 
     private void Trap()
     {
