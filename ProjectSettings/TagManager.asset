@@ -22,7 +22,7 @@ TagManager:
   - Traps
   - Ground
   - Enemy
-  - 
+  - Frame
   - 
   - 
   - 
@@ -64,4 +64,7 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 3700092533
+    locked: 0
+  - name: Frame
+    uniqueID: 2820614227
     locked: 0
