@@ -14,14 +14,14 @@ TagManager:
   - 
   - 
   - 
-  - Climbing
-  - Player
-  - Background
-  - Jumper
-  - BG
-  - Traps
-  - Ground
-  - Enemy
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -40,28 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: BG
-    uniqueID: 2374288191
-    locked: 0
-  - name: Background
-    uniqueID: 197775881
-    locked: 0
-  - name: Jumper
-    uniqueID: 1408063767
-    locked: 0
-  - name: Ladders
-    uniqueID: 2209719901
-    locked: 0
-  - name: Enemy
-    uniqueID: 56007213
-    locked: 0
-  - name: Player
-    uniqueID: 3939719795
-    locked: 0
-  - name: Traps
-    uniqueID: 1863411325
-    locked: 0
-  - name: Foreground
-    uniqueID: 3700092533
     locked: 0
