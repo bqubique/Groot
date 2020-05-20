@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] public Transform target;
+    public Transform target;
     public float speed = 0.0f;
 
     public Vector2 maxCameraPosition;
@@ -15,7 +15,12 @@ public class CameraFollow : MonoBehaviour
         if(transform.position != target.position)
         {
             Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPosition, speed);           
+            //targetPosition.x = Mathf.Clamp(targetPosition.x, minCameraPosition.x, maxCameraPosition.x);
+            //targetPosition.y = Mathf.Clamp(targetPosition.y, minCameraPosition.y, maxCameraPosition.y);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, speed);
+            
+            
+            
         }
     }
 }

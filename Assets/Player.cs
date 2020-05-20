@@ -19,25 +19,22 @@ public class Player : MonoBehaviour
     [SerializeField] int currentHealth = 100;
     [SerializeField] Vector2 flyside = new Vector2(xside, yside);
     [SerializeField] Vector2 flytop = new Vector2(xtop, ytop);
-    [SerializeField] public HealthBar healthBar;
     [SerializeField] TextMeshProUGUI HealthText;
-
-    CapsuleCollider2D bodyCollider;
-    BoxCollider2D playerFeet;
-
-    
     
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
-    private SpriteRenderer spriteComponent;
-    private Animation animation;
-    private Camera camera1;
-    private Camera camera2;
-    private Camera camera3;
     int jumpcount = 0;
+    private SpriteRenderer spriteComponent;
     bool running = false;
+    bool isAlive = true;
     bool FaceRight = false;
+
+    CapsuleCollider2D bodyCollider;
+    BoxCollider2D playerFeet;
     float previousGravityScale;
+
+
+    [SerializeField] public HealthBar healthBar;
 
     void Start()
     {
@@ -49,17 +46,10 @@ public class Player : MonoBehaviour
         bodyCollider = GetComponent<CapsuleCollider2D>();
         previousGravityScale = rigidbody.gravityScale;
         playerFeet = GetComponent<BoxCollider2D>();
-        camera1 = GameObject.Find("Main Camera").GetComponent<Camera>();
-        camera2 = GameObject.Find("Map1").GetComponent<Camera>();
-        camera3 = GameObject.Find("Map2").GetComponent<Camera>();
-        camera1.enabled = true;
-        camera2.enabled = false;
-        camera3.enabled = false;
     }
 
     void Update()
     {
-        SwitchCamera();
         Run();
         HandleHorizontalMovement();
         WhichWayFacing();
@@ -69,42 +59,17 @@ public class Player : MonoBehaviour
         Trap();
         Enemy();
         CheckAlive();
-        CheckLiquid();
     }
-                    // 22 42 62 82 102 122
+
     void CheckAlive()
     {
-        if (currentHealth <= 0)
+        if(currentHealth > 0)
         {
-            animatorComponent.SetBool("isAlive", false);
+            isAlive = false;
         }
-    }    
-
-    void SwitchCamera()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
+        else
         {
-            camera1.enabled = false;
-            camera2.enabled = true;
-            camera3.enabled = false;
-        }
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            camera1.enabled = true;
-            camera2.enabled = false;
-            camera3.enabled = false;
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            camera1.enabled = false;
-            camera2.enabled = false;
-            camera3.enabled = true;
-        }
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            camera1.enabled = true;
-            camera2.enabled = false;
-            camera3.enabled = false;
+            isAlive = true;
         }
     }
 
@@ -112,8 +77,6 @@ public class Player : MonoBehaviour
     {
         float controlThrow = Input.GetAxis("Horizontal");
         Vector2 playerVelocity;
-        bool verticalSpeed = Mathf.Abs(rigidbody.velocity.x) > Mathf.Epsilon;
-        animatorComponent.SetBool("Walking", verticalSpeed);
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             runSpeed = 10;
@@ -144,20 +107,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void CheckLiquid()
-    {
-        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
-        {
-            healthBar.damageHealth(currentHealth);
-            //GetComponent<Rigidbody2D>().velocity = flyside;
-            currentHealth -= 5;
-        }
-    }
 
-   
-
-    private void Trap()
-    {
+    private void Trap() {
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Traps")))
         {
             healthBar.damageHealth(5);
@@ -167,25 +118,24 @@ public class Player : MonoBehaviour
 
     private void ClimbLadder()
     {
-        if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Climbing")))
-        {
-            animatorComponent.SetBool("climbing", false);      //bir ara bak
+        if (!playerFeet.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
+            animatorComponent.SetBool("climbing", false);
             rigidbody.gravityScale = previousGravityScale;
             return;
         }
         float controlThrow = Input.GetAxis("Vertical");
-        Vector2 climbVelocity = new Vector2(rigidbody.velocity.x, controlThrow * climbSpeed);
+        Vector2 climbVelocity = new Vector2(rigidbody.velocity.x,controlThrow*climbSpeed);
         rigidbody.velocity = climbVelocity;
-        rigidbody.gravityScale = 0;        
+        rigidbody.gravityScale = 0;
+        bool verticalSpeed = Mathf.Abs(rigidbody.velocity.y) > Mathf.Epsilon;
+        animatorComponent.SetBool("climbing", verticalSpeed);
     }
 
     private void Jump()
     {
-        bool horizontalSpeed = Mathf.Abs(rigidbody.velocity.y) > Mathf.Epsilon;
-        animatorComponent.SetBool("Jumping", horizontalSpeed);
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
-            if (jumpcount == 0)
+            if(jumpcount == 0)
             {
                 Vector2 JumpVelocityToAdd = new Vector2(0f, firstJumpSpeed);
                 rigidbody.velocity = JumpVelocityToAdd;
@@ -213,12 +163,12 @@ public class Player : MonoBehaviour
         if (FaceRight)
         {
             flyside = new Vector2(-xside, yside);
-            flytop = new Vector2(xtop, ytop);
+            flytop = new Vector2(-xtop, ytop);
         }
         else
         {
             flyside = new Vector2(xside, yside);
-            flytop = new Vector2(-xtop, ytop);
+            flytop = new Vector2(xtop, ytop);
         }
     }
 
@@ -226,7 +176,7 @@ public class Player : MonoBehaviour
     {
         var direction = Input.GetAxisRaw("Horizontal");
         var velocity = rigidbody.velocity;
-
+        
         if (direction > 0f)
         {
             spriteComponent.flipX = false; // Faces right
