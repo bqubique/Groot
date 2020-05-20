@@ -121,8 +121,8 @@ public class Player : MonoBehaviour
     {
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
         {
-            healthBar.damageHealth(5);
-            currentHealth -= 100;
+            healthBar.damageHealth(currentHealth);
+            //currentHealth -= 100;
         }
     }
 
