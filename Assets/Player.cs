@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
         Trap();
         Enemy();
         CheckAlive();
+        Liquid();
     }
 
     void CheckAlive()
@@ -113,6 +114,15 @@ public class Player : MonoBehaviour
         {
             healthBar.damageHealth(5);
             currentHealth -= 5;
+        }
+    }
+
+    private void Liquid()
+    {
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
+        {
+            healthBar.damageHealth(5);
+            currentHealth -= 100;
         }
     }
 
