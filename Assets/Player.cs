@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        GameObject.Find("NextLevelPortal").transform.localScale = new Vector3(0, 0, 0);
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
         healthBar.SetMaxHealth(100);
         rigidbody = GetComponent<Rigidbody2D>();
@@ -70,14 +71,23 @@ public class Player : MonoBehaviour
         Enemy();
         CheckAlive();
         CheckLiquid();
+        CheckGameStatus();
     }
 
+    void CheckGameStatus()
+    {
+        if(GameObject.Find("CoinLayer").transform.childCount == 0)
+        {
+            Debug.Log("Portal has been opened!");
+            GameObject.Find("NextLevelPortal").transform.localScale = new Vector3(1,1,1);
+        }
+    }
     void CheckAlive()
     {
         if (currentHealth <= 0)
         {
             animatorComponent.SetBool("isAlive", false);
-            Debug.Log("UR DED");
+            
         }
     }    
 
