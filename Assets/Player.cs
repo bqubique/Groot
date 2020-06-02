@@ -71,12 +71,13 @@ public class Player : MonoBehaviour
         CheckAlive();
         CheckLiquid();
     }
-                    // 22 42 62 82 102 122
+
     void CheckAlive()
     {
         if (currentHealth <= 0)
         {
             animatorComponent.SetBool("isAlive", false);
+            Debug.Log("UR DED");
         }
     }    
 
