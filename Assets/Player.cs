@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         deathCanvas.SetActive(false);
         GameObject.Find("NextLevelPortal").transform.localScale = new Vector3(0, 0, 0);
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
