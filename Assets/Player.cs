@@ -25,8 +25,6 @@ public class Player : MonoBehaviour
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
 
-    
-    
     public Rigidbody2D rigidbody;
     private Animator animatorComponent;
     private SpriteRenderer spriteComponent;

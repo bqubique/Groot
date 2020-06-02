@@ -13,4 +13,9 @@ public class NextLevel : MonoBehaviour
             SceneManager.LoadScene(levelNo);
         }
     }
+
+    public void ProgressToNextLevel(int level)
+    {
+        SceneManager.LoadScene(level);
+    }
 }
