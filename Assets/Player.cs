@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 flytop = new Vector2(xtop, ytop);
     [SerializeField] public HealthBar healthBar;
     [SerializeField] TextMeshProUGUI HealthText;
+    [SerializeField] GameObject deathCanvas;
+    [SerializeField] GameObject pauseCanvas;
 
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        deathCanvas.SetActive(false);
         GameObject.Find("NextLevelPortal").transform.localScale = new Vector3(0, 0, 0);
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
         healthBar.SetMaxHealth(100);
@@ -70,6 +73,12 @@ public class Player : MonoBehaviour
         CheckAlive();
         CheckLiquid();
         CheckGameStatus();
+        if (currentHealth <= 0)
+        {
+            deathCanvas.SetActive(true);
+            pauseCanvas.SetActive(false);
+            Time.timeScale = 0f;
+        }
     }
 
     void CheckGameStatus()
@@ -82,10 +91,11 @@ public class Player : MonoBehaviour
     }
     void CheckAlive()
     {
-        if (currentHealth <= 0)
+        if (currentHealth == 0)
         {
             animatorComponent.SetBool("isAlive", false);
             
+            //Time.timeScale = 0f;
         }
     }    
 
@@ -158,7 +168,6 @@ public class Player : MonoBehaviour
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Liquid")))
         {
             healthBar.damageHealth(currentHealth);
-            //GetComponent<Rigidbody2D>().velocity = flyside;
             currentHealth -= 5;
         }
     }
