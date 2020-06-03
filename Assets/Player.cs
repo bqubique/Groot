@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI HealthText;
     [SerializeField] GameObject deathCanvas;
     [SerializeField] GameObject pauseCanvas;
+    [SerializeField] Text coinsLeft;
 
     CapsuleCollider2D bodyCollider;
     BoxCollider2D playerFeet;
@@ -80,11 +81,13 @@ public class Player : MonoBehaviour
             pauseCanvas.SetActive(false);
             Time.timeScale = 0f;
         }
+
     }
 
     void CheckGameStatus()
     {
-        if(GameObject.Find("CoinLayer").transform.childCount == 0)
+        coinsLeft.text = (GameObject.Find("CoinLayer").transform.childCount).ToString();
+        if (GameObject.Find("CoinLayer").transform.childCount == 0)
         {
             Debug.Log("Portal has been opened!");
             GameObject.Find("NextLevelPortal").transform.localScale = new Vector3(1,1,1);
