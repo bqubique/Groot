@@ -91,7 +91,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -355247501
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: b5d17e4caad91c141ad2e264f835902e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -183,12 +183,15 @@ MonoBehaviour:
   firstJumpSpeed: 25
   secondJumpSpeed: 10
   climbSpeed: 10
-  health: 100
-  HealthText: {fileID: 0}
-  rigidbody: {fileID: 5471729151543527692}
-  maxHealth: 100
   currentHealth: 0
+  flyside: {x: 30, y: 10}
+  flytop: {x: 45, y: 20}
   healthBar: {fileID: 0}
+  HealthText: {fileID: 0}
+  deathCanvas: {fileID: 0}
+  pauseCanvas: {fileID: 0}
+  coinsLeft: {fileID: 0}
+  rigidbody: {fileID: 5471729151543527692}
 --- !u!1001 &5471729150742825706
 PrefabInstance:
   m_ObjectHideFlags: 0
